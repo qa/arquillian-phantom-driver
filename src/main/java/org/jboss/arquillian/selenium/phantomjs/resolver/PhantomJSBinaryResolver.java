@@ -1,4 +1,4 @@
-package org.jboss.selenium.phantomjs.resolver;
+package org.jboss.arquillian.selenium.phantomjs.resolver;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,9 +14,9 @@ import java.util.zip.ZipFile;
  */
 public class PhantomJSBinaryResolver {
 
-    private static final String CHECKSUM_EXTENSION = "sha1";
-    private static final String PHANTOMJS = "phantomjs" + (isWindows() ? ".exe" : "");
-    private static final String PHANTOMJS_CHECKSUM = PHANTOMJS + "." + CHECKSUM_EXTENSION;
+    public static final String CHECKSUM_EXTENSION = "sha1";
+    public static final String PHANTOMJS = "phantomjs" + (isWindows() ? ".exe" : "");
+    public static final String PHANTOMJS_CHECKSUM = PHANTOMJS + "." + CHECKSUM_EXTENSION;
 
     public PhantomJSBinary resolve(String destination) throws IOException {
         return resolve(new File(destination));

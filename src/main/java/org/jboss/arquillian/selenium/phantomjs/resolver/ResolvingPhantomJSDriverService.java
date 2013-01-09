@@ -1,4 +1,4 @@
-package org.jboss.selenium.phantomjs.resolver;
+package org.jboss.arquillian.selenium.phantomjs.resolver;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -25,21 +25,20 @@ public class ResolvingPhantomJSDriverService extends DriverService {
 
     public static DriverService createDefaultService(Capabilities capabilities) throws IOException {
         PhantomJSBinary binary;
-        String phantomjs = capabilities == null ? null : (String) capabilities.getCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY);
+        String phantomjs = capabilities == null ? null : (String) capabilities.getCapability(PHANTOMJS_EXECUTABLE_PATH_PROPERTY);
         if (phantomjs == null) {
             if (CommandLine.find(PHANTOMJS_DEFAULT_EXECUTABLE) != null) {
                 return PhantomJSDriverService.createDefaultService(capabilities);
             } else {
-                File temp = File.createTempFile("drone-phantomjs-", "");
-                temp.deleteOnExit();
-                LOG.log(Level.WARNING, "{0} capability isn''t set, so resolving phantomjs binary as {1}", new String[] {PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, temp.getAbsolutePath()});
-                binary = new PhantomJSBinaryResolver().resolve(temp);
+                File temp = File.createTempFile("phantomjs-binary-", "");
+                LOG.log(Level.WARNING, "{0} capability isn''t set, so resolving phantomjs binary as {1}", new String[] {PHANTOMJS_EXECUTABLE_PATH_PROPERTY, temp.getAbsolutePath()});
+                binary = new PhantomJSBinaryResolver().resolve(temp).deleteOnExit();
             }
         } else {
             binary = new PhantomJSBinaryResolver().resolve(phantomjs);
         }
         DesiredCapabilities newCapabilities = new DesiredCapabilities(capabilities);
-        newCapabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, binary.getLocation().getAbsolutePath());
+        newCapabilities.setCapability(PHANTOMJS_EXECUTABLE_PATH_PROPERTY, binary.getLocation().getAbsolutePath());
         return PhantomJSDriverService.createDefaultService(newCapabilities);
     }
 

@@ -1,4 +1,4 @@
-package org.jboss.selenium.phantomjs.resolver;
+package org.jboss.arquillian.selenium.phantomjs.resolver;
 
 import java.io.Closeable;
 import java.io.File;
@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -53,7 +55,11 @@ public class FileUtils {
 
     public static void setExecutable(File file) throws IOException {
         if (isUnix()) {
-            Runtime.getRuntime().exec("chmod +x " + file.getAbsolutePath());
+            try {
+                Runtime.getRuntime().exec("chmod +x " + file.getAbsolutePath()).waitFor();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 

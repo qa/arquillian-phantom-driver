@@ -1,4 +1,4 @@
-package org.jboss.selenium.phantomjs.resolver;
+package org.jboss.arquillian.selenium.phantomjs.resolver;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,8 +6,6 @@ import java.io.IOException;
 public class PhantomJSBinary {
 
     private final File location;
-
-
 
     public PhantomJSBinary(String location) throws IOException {
         this(new File(location));
@@ -25,8 +23,10 @@ public class PhantomJSBinary {
         return location.delete();
     }
 
-    public void deleteOnExit() {
+    public PhantomJSBinary deleteOnExit() {
         location.deleteOnExit();
+        new File(location.getAbsoluteFile() + "." + PhantomJSBinaryResolver.CHECKSUM_EXTENSION).deleteOnExit();
+        return this;
     }
 
 }
