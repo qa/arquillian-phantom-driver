@@ -129,7 +129,7 @@
             </activation>
             <dependencies>
                 <dependency>
-                    <groupId>org.jboss.phantomjs</groupId>
+                    <groupId>org.jboss.arquillian.selenium</groupId>
                     <artifactId>phantomjs-binary</artifactId>
                     <version>${phantomjs.version}</version>
                     <classifier>unix_${os.arch}</classifier>
@@ -145,7 +145,7 @@
             </activation>
             <dependencies>
                 <dependency>
-                    <groupId>org.jboss.phantomjs</groupId>
+                    <groupId>org.jboss.arquillian.selenium</groupId>
                     <artifactId>phantomjs-binary</artifactId>
                     <version>${phantomjs.version}</version>
                     <classifier>mac</classifier>
@@ -161,7 +161,7 @@
             </activation>
             <dependencies>
                 <dependency>
-                    <groupId>org.jboss.phantomjs</groupId>
+                    <groupId>org.jboss.arquillian.selenium</groupId>
                     <artifactId>phantomjs-binary</artifactId>
                     <version>${phantomjs.version}</version>
                     <classifier>windows</classifier>
