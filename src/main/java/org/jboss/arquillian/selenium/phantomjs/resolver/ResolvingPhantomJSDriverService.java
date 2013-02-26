@@ -15,6 +15,7 @@ import org.openqa.selenium.remote.service.DriverService;
 public class ResolvingPhantomJSDriverService extends DriverService {
 
     public static final String PHANTOMJS_EXECUTABLE_PATH_PROPERTY = PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY;
+    public static final String PHANTOMJS_BINARY_RESOLVER_PROPERTY = "phantomjs.binary.resolver";
     public static final String PHANTOMJS_DEFAULT_EXECUTABLE = "phantomjs";
 
     private static final Logger LOG = Logger.getLogger(ResolvingPhantomJSDriverService.class.getName());
@@ -30,12 +31,13 @@ public class ResolvingPhantomJSDriverService extends DriverService {
             if (CommandLine.find(PHANTOMJS_DEFAULT_EXECUTABLE) != null) {
                 return PhantomJSDriverService.createDefaultService(capabilities);
             } else {
+                PhantomJSBinaryResolver resolver = capabilities == null || capabilities.getCapability(PHANTOMJS_BINARY_RESOLVER_PROPERTY) == null ? new PhantomJSBinaryResourceResolver() : (PhantomJSBinaryResolver) capabilities.getCapability(PHANTOMJS_BINARY_RESOLVER_PROPERTY);
                 File temp = File.createTempFile("phantomjs-binary-", "");
                 LOG.log(Level.WARNING, "{0} capability isn''t set, so resolving phantomjs binary as {1}", new String[] {PHANTOMJS_EXECUTABLE_PATH_PROPERTY, temp.getAbsolutePath()});
-                binary = new PhantomJSBinaryResolver().resolve(temp).deleteOnExit();
+                binary = resolver.resolve(temp).deleteOnExit();
             }
         } else {
-            binary = new PhantomJSBinaryResolver().resolve(phantomjs);
+            binary = new PhantomJSBinaryResourceResolver().resolve(phantomjs);
         }
         DesiredCapabilities newCapabilities = new DesiredCapabilities(capabilities);
         newCapabilities.setCapability(PHANTOMJS_EXECUTABLE_PATH_PROPERTY, binary.getLocation().getAbsolutePath());

@@ -1,79 +1,44 @@
+/*
+ * Copyright 2013 JBoss by Red Hat.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.jboss.arquillian.selenium.phantomjs.resolver;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.zip.ZipFile;
 
 /**
- * This class can resolve phantomjs binary needed to start server for PhantomJS
- * driver.
+ * @author <a href="mailto:jpapouse@redhat.com">Jan Papousek</a>
  */
-public class PhantomJSBinaryResolver {
+public interface PhantomJSBinaryResolver {
 
-    public static final String CHECKSUM_EXTENSION = "sha1";
-    public static final String PHANTOMJS = "phantomjs" + (isWindows() ? ".exe" : "");
-    public static final String PHANTOMJS_CHECKSUM = PHANTOMJS + "." + CHECKSUM_EXTENSION;
+    /**
+     * Resolves a phantomjs binary file to the given destination. If
+     * the destination file exists, it tries to check whether the file is up to date
+     * and if it isn't, it is overridden.
+     *
+     * @throws IOException if there is a problem with resolving
+     */
+    PhantomJSBinary resolve(String destination) throws IOException;
 
-    public PhantomJSBinary resolve(String destination) throws IOException {
-        return resolve(new File(destination));
-    }
-
-    public PhantomJSBinary resolve(File destination) throws IOException {
-        File realDestination = destination.isDirectory() ? new File(destination, PHANTOMJS) : destination;
-        if (alreadyExists(realDestination)) {
-            return new PhantomJSBinary(realDestination);
-        }
-        return resolveFreshExtracted(realDestination);
-    }
-
-    protected boolean alreadyExists(File destination) throws IOException {
-        File extractedChecksumFile = new File(destination.getAbsolutePath() + "." + CHECKSUM_EXTENSION);
-        if (!extractedChecksumFile.exists()) {
-            return false;
-        }
-        URL inArchiveChecksumURL = PhantomJSBinaryResolver.class.getClassLoader().getResource(PHANTOMJS_CHECKSUM);
-        BufferedReader extractedReader = null;
-        BufferedReader inArchiveReader = null;
-        try {
-            extractedReader = new BufferedReader(new InputStreamReader(new FileInputStream(extractedChecksumFile)));
-            inArchiveReader = new BufferedReader(new InputStreamReader(inArchiveChecksumURL.openStream()));
-            String extracted = extractedReader.readLine();
-            String inArchive = inArchiveReader.readLine();
-            return extracted != null && extracted.equals(inArchive);
-        } finally {
-            FileUtils.close(extractedReader);
-            FileUtils.close(inArchiveReader);
-        }
-    }
-
-    protected File getJavaArchive(URL resource) {
-        return new File(resource.getPath().split("!")[0].replace("file:", ""));
-    }
-
-    protected PhantomJSBinary resolveFromClassPath() throws IOException {
-        return new PhantomJSBinary(PhantomJSBinaryResolver.class.getClassLoader().getResource(PHANTOMJS).getFile());
-    }
-
-    protected PhantomJSBinary resolveFreshExtracted(File destination) throws IOException {
-        File checksum = new File(destination.getAbsolutePath() + "." + CHECKSUM_EXTENSION);
-        if (!destination.exists()) {
-            destination.delete();
-        }
-        if (checksum.exists()) {
-            checksum.delete();
-        }
-        ZipFile jar = new ZipFile(getJavaArchive(PhantomJSBinaryResolver.class.getClassLoader().getResource(PHANTOMJS)));
-        FileUtils.extract(jar, PHANTOMJS, destination);
-        FileUtils.extract(jar, PHANTOMJS_CHECKSUM, checksum);
-        return new PhantomJSBinary(destination);
-    }
-
-    protected static boolean isWindows() {
-        return System.getProperty("os.name").toLowerCase().indexOf("win") >= 0;
-    }
+    /**
+     * Resolves a phantomjs binary file to the given destination. If
+     * the destination file exists, it tries to check whether the file is up to date
+     * and if it isn't, it is overridden.
+     *
+     * @throws IOException if there is a problem with resolving
+     */
+    PhantomJSBinary resolve(File destination) throws IOException;
 
 }
