@@ -1,4 +1,4 @@
-package org.jboss.arquillian.selenium.phantomjs.resolver;
+package org.jboss.arquillian.phantom.resolver;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;

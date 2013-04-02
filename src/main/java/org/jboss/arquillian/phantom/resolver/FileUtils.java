@@ -1,4 +1,4 @@
-package org.jboss.arquillian.selenium.phantomjs.resolver;
+package org.jboss.arquillian.phantom.resolver;
 
 import java.io.Closeable;
 import java.io.File;

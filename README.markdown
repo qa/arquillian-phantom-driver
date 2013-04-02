@@ -1,7 +1,6 @@
-# PhantomJS Driver
+# Arquillian Phantom Driver
 
-Project improving [Ghost Driver](https://github.com/detro/ghostdriver) binding for Java.
-You can use Ghost Driver binding for Java without installation of [PhantomJS](http://phantomjs.org/).
+Arquillian Phantom Driver provides dependency on the [GhostDriver](https://github.com/detro/ghostdriver), dependency on [PhantomJS](http://phantomjs.org/) binary and provides runtime resolution of [the binary artifact](https://github.com/qa/arquillian-phantom-binary) (distributed in Maven repository) to enable true headless unattended testing without need of local PhantomJS installation.
 
 ## Usage
 
@@ -9,9 +8,9 @@ Add following snippet to your project's POM:
 
     <dependencies>
         <dependency>
-            <groupId>org.jboss.arquillian.selenium</groupId>
-            <artifactId>selenium-phantomjs-driver</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <groupId>org.jboss.arquillian.extension</groupId>
+            <artifactId>arquillian-phantom-driver</artifactId>
+            <version>1.0.3</version>
         </dependency>
     </dependencies>
 

@@ -1,4 +1,4 @@
-package org.jboss.arquillian.selenium.phantomjs.resolver;
+package org.jboss.arquillian.phantom.resolver;
 
 import java.io.File;
 import java.io.IOException;

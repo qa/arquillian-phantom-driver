@@ -1,8 +1,10 @@
-package org.jboss.arquillian.selenium.phantomjs.resolver;
+package org.jboss.arquillian.phantom.resolver;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+
+import org.jboss.arquillian.phantom.resolver.ResolvingPhantomJSDriverService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
