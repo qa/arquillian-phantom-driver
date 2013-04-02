@@ -31,7 +31,8 @@ public class PhantomJSBinaryResourceResolver implements PhantomJSBinaryResolver 
 
     public static final String CHECKSUM_EXTENSION = "sha1";
     public static final String PHANTOMJS = "phantomjs" + (isWindows() ? ".exe" : "");
-    public static final String PHANTOMJS_CHECKSUM = PHANTOMJS + "." + CHECKSUM_EXTENSION;
+    public static final String PHANTOMJS_RESOURCE = (isWindows() ? "" : "bin/") + PHANTOMJS;
+    public static final String PHANTOMJS_CHECKSUM = PHANTOMJS_RESOURCE + "." + CHECKSUM_EXTENSION;
 
     @Override
     public PhantomJSBinary resolve(String destination) throws IOException {
@@ -85,8 +86,8 @@ public class PhantomJSBinaryResourceResolver implements PhantomJSBinaryResolver 
         if (checksum.exists()) {
             checksum.delete();
         }
-        ZipFile jar = new ZipFile(getJavaArchive(PhantomJSBinaryResourceResolver.class.getClassLoader().getResource(PHANTOMJS)));
-        FileUtils.extract(jar, PHANTOMJS, destination);
+        ZipFile jar = new ZipFile(getJavaArchive(PhantomJSBinaryResourceResolver.class.getClassLoader().getResource(PHANTOMJS_RESOURCE)));
+        FileUtils.extract(jar, PHANTOMJS_RESOURCE, destination);
         FileUtils.extract(jar, PHANTOMJS_CHECKSUM, checksum);
         return new PhantomJSBinary(destination, checksum);
     }

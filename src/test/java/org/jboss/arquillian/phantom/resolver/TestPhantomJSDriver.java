@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import org.jboss.arquillian.phantom.resolver.ResolvingPhantomJSDriverService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
@@ -24,8 +23,10 @@ public class TestPhantomJSDriver {
     @Test
     public void testSimpleWithPath() throws IOException {
         File binary = new File("target/phantomjs");
-        if (binary.exists()) {
+        File checksum = new File(binary.getPath() + ".sha1");
+        if (binary.exists() || checksum.exists()) {
             binary.delete();
+            checksum.delete();
         }
         DesiredCapabilities capabilities = DesiredCapabilities.phantomjs();
         capabilities.setCapability(ResolvingPhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, binary.getAbsoluteFile().getPath());
