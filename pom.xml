@@ -62,6 +62,23 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <configuration>
+                        <!-- Use a local checkout instead of doing a checkout from the upstream repository -->
+                        <localCheckout>true</localCheckout>
+                        <!-- Will not push changes to the upstream repository -->
+                        <pushChanges>false</pushChanges>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
     <profiles>
         <profile>
             <id>linux</id>
@@ -112,4 +129,10 @@
             </dependencies>
         </profile>
     </profiles>
+
+    <scm>
+        <connection>scm:git:git://github.com/qa/arquillian-phantom-driver.git</connection>
+        <developerConnection>scm:git:git@github.com:qa/arquillian-phantom-driver.git</developerConnection>
+        <url>https://github.com/qa/arquillian-phantom-driver</url>
+    </scm>
 </project>
