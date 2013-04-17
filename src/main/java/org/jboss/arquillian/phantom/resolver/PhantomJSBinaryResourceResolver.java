@@ -20,7 +20,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.zip.ZipFile;
 
 /**
@@ -69,13 +71,21 @@ public class PhantomJSBinaryResourceResolver implements PhantomJSBinaryResolver 
     }
 
     protected File getJavaArchive(URL resource) {
-        return new File(resource.getPath().split("!")[0].replace("file:", ""));
+        if (resource == null) {
+            throw new IllegalArgumentException("The given resource is null.");
+        }
+        try {
+            String path = URLDecoder.decode(resource.getPath(), "UTF-8");
+            return new File(path.split("!")[0].replace("file:", ""));
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalStateException("Unable to decode a file path '" + resource.getPath() + "'.", e);
+        }
     }
 
     protected PhantomJSBinary resolveFromClassPath() throws IOException {
         return new PhantomJSBinary(
-                PhantomJSBinaryResourceResolver.class.getClassLoader().getResource(PHANTOMJS).getFile(),
-                PhantomJSBinaryResourceResolver.class.getClassLoader().getResource(PHANTOMJS).getFile() + "." + CHECKSUM_EXTENSION);
+                getClass().getClassLoader().getResource(PHANTOMJS).getFile(),
+                getClass().getClassLoader().getResource(PHANTOMJS).getFile() + "." + CHECKSUM_EXTENSION);
     }
 
     protected PhantomJSBinary resolveFreshExtracted(File destination) throws IOException {
@@ -86,7 +96,7 @@ public class PhantomJSBinaryResourceResolver implements PhantomJSBinaryResolver 
         if (checksum.exists()) {
             checksum.delete();
         }
-        ZipFile jar = new ZipFile(getJavaArchive(PhantomJSBinaryResourceResolver.class.getClassLoader().getResource(PHANTOMJS_RESOURCE)));
+        ZipFile jar = new ZipFile(getJavaArchive(getClass().getClassLoader().getResource(PHANTOMJS_RESOURCE)));
         FileUtils.extract(jar, PHANTOMJS_RESOURCE, destination);
         FileUtils.extract(jar, PHANTOMJS_CHECKSUM, checksum);
         return new PhantomJSBinary(destination, checksum);
