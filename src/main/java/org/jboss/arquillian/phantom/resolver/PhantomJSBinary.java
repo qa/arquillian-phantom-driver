@@ -6,14 +6,12 @@ import java.io.IOException;
 public class PhantomJSBinary {
 
     private final File location;
-    private final File checksum;
 
-    public PhantomJSBinary(String location, String checksum) throws IOException {
-        this(new File(location), new File(checksum));
+    public PhantomJSBinary(String location) throws IOException {
+        this(new File(location));
     }
-    public PhantomJSBinary(File location, File checksum) throws IOException {
+    public PhantomJSBinary(File location) throws IOException {
         this.location = location;
-        this.checksum = checksum;
         FileUtils.setExecutable(location);
     }
 
@@ -22,12 +20,11 @@ public class PhantomJSBinary {
     }
 
     public boolean delete() {
-        return location.delete() && checksum.delete();
+        return location.delete();
     }
 
     public PhantomJSBinary deleteOnExit() {
         location.deleteOnExit();
-        checksum.deleteOnExit();
         return this;
     }
 
