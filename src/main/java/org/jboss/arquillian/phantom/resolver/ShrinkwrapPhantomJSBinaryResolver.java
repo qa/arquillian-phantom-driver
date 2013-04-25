@@ -68,7 +68,10 @@ public class ShrinkwrapPhantomJSBinaryResolver implements PhantomJSBinaryResolve
             case MACOSX:
                 return ARTIFACT_BINARY + ":macosx:" + version;
             default:
-                throw new IllegalStateException("The current platform is not supported.");
+                throw new IllegalStateException("The current platform is not supported."
+                        + "Supported platforms are windows, linux and macosx."
+                        + "Your platform has been detected as " + PlatformUtils.platform().os().toString().toLowerCase() + ""
+                        + "from the the system property 'os.name' => '" + PlatformUtils.OS + "'.");
         }
     }
 

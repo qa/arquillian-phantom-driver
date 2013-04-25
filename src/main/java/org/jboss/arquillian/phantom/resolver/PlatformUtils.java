@@ -17,10 +17,11 @@ package org.jboss.arquillian.phantom.resolver;
 
 public class PlatformUtils {
 
-    private static String OS = System.getProperty("os.name").toLowerCase();
+    public static String OS = System.getProperty("os.name").toLowerCase();
+    public static String ARCH = System.getProperty("os.arch").toLowerCase();
 
     public enum OperatingSystem {
-        WINDOWS, UNIX, MACOSX, SOLARIS;
+        WINDOWS, UNIX, MACOSX, SOLARIS, UNKNOWN;
     }
 
     public enum Architecture {
@@ -63,8 +64,10 @@ public class PlatformUtils {
                     return OperatingSystem.UNIX;
                 } else if (isMac()) {
                     return OperatingSystem.MACOSX;
-                } else {
+                } else if (isSolaris()) {
                     return OperatingSystem.SOLARIS;
+                } else {
+                    return OperatingSystem.UNKNOWN;
                 }
             }
 
