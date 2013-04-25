@@ -7,9 +7,9 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-public class TestPhantomJSBinaryResourceResolver {
+public class TestShrinkwrapPhantomJSBinaryResolver {
 
-    private PhantomJSBinaryResolver resolver = new PhantomJSBinaryResourceResolver();
+    private PhantomJSBinaryResolver resolver = new ShrinkwrapPhantomJSBinaryResolver();
 
     @Test
     public void testResolving() throws IOException {
@@ -26,7 +26,7 @@ public class TestPhantomJSBinaryResourceResolver {
         assertTrue(location.exists());
         binary.delete();
 
-        binary = resolver.resolve("target/testDelete-phantomjs");
+        resolver.resolve("target/testDelete-phantomjs");
         assertTrue(location.exists());
     }
 }

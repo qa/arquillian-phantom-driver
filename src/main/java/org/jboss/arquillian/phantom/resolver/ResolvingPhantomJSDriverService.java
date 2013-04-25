@@ -31,13 +31,13 @@ public class ResolvingPhantomJSDriverService extends DriverService {
             if (CommandLine.find(PHANTOMJS_DEFAULT_EXECUTABLE) != null) {
                 return PhantomJSDriverService.createDefaultService(capabilities);
             } else {
-                PhantomJSBinaryResolver resolver = capabilities == null || capabilities.getCapability(PHANTOMJS_BINARY_RESOLVER_PROPERTY) == null ? new PhantomJSBinaryResourceResolver() : (PhantomJSBinaryResolver) capabilities.getCapability(PHANTOMJS_BINARY_RESOLVER_PROPERTY);
+                PhantomJSBinaryResolver resolver = capabilities == null || capabilities.getCapability(PHANTOMJS_BINARY_RESOLVER_PROPERTY) == null ? new ShrinkwrapPhantomJSBinaryResolver() : (PhantomJSBinaryResolver) capabilities.getCapability(PHANTOMJS_BINARY_RESOLVER_PROPERTY);
                 File temp = File.createTempFile("phantomjs-binary-", "");
                 LOG.log(Level.WARNING, "{0} capability isn''t set, so resolving phantomjs binary as {1}", new String[] {PHANTOMJS_EXECUTABLE_PATH_PROPERTY, temp.getAbsolutePath()});
                 binary = resolver.resolve(temp).deleteOnExit();
             }
         } else {
-            binary = new PhantomJSBinaryResourceResolver().resolve(phantomjs);
+            binary = new ShrinkwrapPhantomJSBinaryResolver().resolve(phantomjs);
         }
         DesiredCapabilities newCapabilities = new DesiredCapabilities(capabilities);
         newCapabilities.setCapability(PHANTOMJS_EXECUTABLE_PATH_PROPERTY, binary.getLocation().getAbsolutePath());
