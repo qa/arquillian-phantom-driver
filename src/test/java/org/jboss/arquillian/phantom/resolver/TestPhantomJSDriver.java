@@ -22,11 +22,9 @@ public class TestPhantomJSDriver {
 
     @Test
     public void testSimpleWithPath() throws IOException {
-        File binary = new File("target/phantomjs");
-        File checksum = new File(binary.getPath() + ".sha1");
-        if (binary.exists() || checksum.exists()) {
+        File binary = new File("target/phantomjs/phantomjs");
+        if (binary.exists()) {
             binary.delete();
-            checksum.delete();
         }
         DesiredCapabilities capabilities = DesiredCapabilities.phantomjs();
         capabilities.setCapability(ResolvingPhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, binary.getAbsoluteFile().getPath());

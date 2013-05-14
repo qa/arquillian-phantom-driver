@@ -28,6 +28,12 @@ public class ShrinkwrapPhantomJSBinaryResolver implements PhantomJSBinaryResolve
     protected static final String ARTIFACT_BINARY = "org.jboss.arquillian.extension:arquillian-phantom-binary:jar";
     protected static final String PHANTOMJS_VERSION = "1.9.0";
 
+    public PhantomJSBinary resolve() throws IOException {
+        File temp = File.createTempFile("phantomjs-binary-", "");
+        temp.deleteOnExit();
+        return resolveFreshExtracted(temp, PHANTOMJS_VERSION);
+    }
+
     @Override
     public PhantomJSBinary resolve(String destination) throws IOException {
         return resolve(new File(destination));
@@ -45,6 +51,9 @@ public class ShrinkwrapPhantomJSBinaryResolver implements PhantomJSBinaryResolve
     protected PhantomJSBinary resolveFreshExtracted(File destination, String version) throws IOException {
         if (destination.exists()) {
             destination.delete();
+        }
+        if (!destination.getParentFile().exists()) {
+            destination.getParentFile().mkdirs();
         }
         ZipFile jar = new ZipFile(getJavaArchive(version));
         FileUtils.extract(jar, PHANTOMJS_RESOURCE, destination);
