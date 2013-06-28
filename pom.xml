@@ -11,7 +11,7 @@
 
     <groupId>org.jboss.arquillian.extension</groupId>
     <artifactId>arquillian-phantom-driver</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.3.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Arquillian Phantom Driver</name>
@@ -84,6 +84,7 @@
             <activation>
                 <os>
                     <family>unix</family>
+		            <name>!mac os x</name>
                 </os>
             </activation>
             <dependencies>
