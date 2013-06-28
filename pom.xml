@@ -84,7 +84,7 @@
             <activation>
                 <os>
                     <family>unix</family>
-		            <name>!mac os x</name>
+                    <name>!mac os x</name>
                 </os>
             </activation>
             <dependencies>
