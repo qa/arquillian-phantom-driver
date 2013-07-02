@@ -13,57 +13,67 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.arquillian.phantom.resolver;
+package org.jboss.arquillian.phantom.resolver.maven;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.zip.ZipFile;
+
+import org.jboss.arquillian.phantom.resolver.FileUtils;
+import org.jboss.arquillian.phantom.resolver.PhantomJSBinary;
+import org.jboss.arquillian.phantom.resolver.PhantomJSBinaryResolver;
+import org.jboss.arquillian.phantom.resolver.ResolverConfiguration;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 
-public class ShrinkwrapPhantomJSBinaryResolver implements PhantomJSBinaryResolver {
+public class MavenPhantomJSBinaryResolver implements PhantomJSBinaryResolver {
 
     public static final String PHANTOMJS = "phantomjs" + (PlatformUtils.isWindows() ? ".exe" : "");
     public static final String PHANTOMJS_RESOURCE = (PlatformUtils.isWindows() ? "" : "bin/") + PHANTOMJS;
 
     protected static final String ARTIFACT_BINARY = "org.jboss.arquillian.extension:arquillian-phantom-binary:jar";
-    protected static final String PHANTOMJS_VERSION = "1.9.0";
 
-    public PhantomJSBinary resolve() throws IOException {
-        File temp = File.createTempFile("phantomjs-binary-", "");
-        temp.deleteOnExit();
-        return resolveFreshExtracted(temp, PHANTOMJS_VERSION);
-    }
-
-    @Override
-    public PhantomJSBinary resolve(String destination) throws IOException {
-        return resolve(new File(destination));
-    }
-
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.jboss.arquillian.phantom.resolver.PhantomJSBinaryResolver#resolve(java.io.File)
+     */
     @Override
     public PhantomJSBinary resolve(File destination) throws IOException {
         File realDestination = destination.isDirectory() ? new File(destination, PHANTOMJS) : destination;
-        if (realDestination.exists()) {
+        if (realDestination.exists() && realDestination.canExecute()) {
             return new PhantomJSBinary(realDestination);
         }
-        return resolveFreshExtracted(realDestination, PHANTOMJS_VERSION);
+        return resolveFreshExtracted(realDestination);
     }
 
-    protected PhantomJSBinary resolveFreshExtracted(File destination, String version) throws IOException {
+    /**
+     * Resolves fresh phantomjs binary from Maven
+     */
+    protected PhantomJSBinary resolveFreshExtracted(File destination) throws IOException {
         if (destination.exists()) {
             destination.delete();
         }
         if (!destination.getParentFile().exists()) {
             destination.getParentFile().mkdirs();
         }
-        ZipFile jar = new ZipFile(getJavaArchive(version));
+        ZipFile jar = new ZipFile(getJavaArchive());
         FileUtils.extract(jar, PHANTOMJS_RESOURCE, destination);
         return new PhantomJSBinary(destination);
     }
 
-    protected File getJavaArchive(String version) {
-        return Maven.resolver().resolve(getArtifactCanonicalForm(version)).withoutTransitivity().asSingleFile();
+    /**
+     * Obtains JavaArchive with phantomjs binary
+     */
+    protected File getJavaArchive() {
+        final String version = ResolverConfiguration.get().version();
+        final String gav = getArtifactCanonicalForm(version);
+
+        return Maven.resolver().resolve(gav).withoutTransitivity().asSingleFile();
     }
 
+    /**
+     * Returns GAV for given artifact version
+     */
     protected String getArtifactCanonicalForm(String version) {
         switch (PlatformUtils.platform().os()) {
             case WINDOWS:
@@ -78,8 +88,8 @@ public class ShrinkwrapPhantomJSBinaryResolver implements PhantomJSBinaryResolve
                 return ARTIFACT_BINARY + ":macosx:" + version;
             default:
                 throw new IllegalStateException("The current platform is not supported."
-                        + "Supported platforms are windows, linux and macosx."
-                        + "Your platform has been detected as " + PlatformUtils.platform().os().toString().toLowerCase() + ""
+                        + "Supported platforms are windows, linux and macosx." + "Your platform has been detected as "
+                        + PlatformUtils.platform().os().toString().toLowerCase() + ""
                         + "from the the system property 'os.name' => '" + PlatformUtils.OS + "'.");
         }
     }

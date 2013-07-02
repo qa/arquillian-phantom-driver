@@ -9,12 +9,15 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.service.DriverService;
 
-public class TestPhantomJSDriver {
+public class TestDriver {
 
     @Test
     public void testSimple() throws IOException {
-        WebDriver driver = new PhantomJSDriver(ResolvingPhantomJSDriverService.createDefaultService(), DesiredCapabilities.phantomjs());
+        DriverService service = ResolvingPhantomJSDriverService.createDefaultService();
+
+        WebDriver driver = new PhantomJSDriver(service, DesiredCapabilities.phantomjs());
         loadPage(driver);
         Assert.assertEquals("The page title doesn't match.", "Simple Page", driver.getTitle());
         driver.quit();
@@ -26,8 +29,9 @@ public class TestPhantomJSDriver {
         if (binary.exists()) {
             binary.delete();
         }
+
         DesiredCapabilities capabilities = DesiredCapabilities.phantomjs();
-        capabilities.setCapability(ResolvingPhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, binary.getAbsoluteFile().getPath());
+        capabilities.setCapability(ResolverConfiguration.PHANTOMJS_EXECUTABLE_PATH, binary.getAbsoluteFile().getPath());
         WebDriver driver = new PhantomJSDriver(ResolvingPhantomJSDriverService.createDefaultService(capabilities), DesiredCapabilities.phantomjs());
         loadPage(driver);
         Assert.assertEquals("The page title doesn't match.", "Simple Page", driver.getTitle());
