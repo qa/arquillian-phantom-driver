@@ -2,6 +2,8 @@ package org.jboss.arquillian.phantom.resolver;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.jboss.arquillian.phantom.resolver.maven.MavenPhantomJSBinaryResolver;
 import org.openqa.selenium.Capabilities;
@@ -34,6 +36,9 @@ public final class ResolverConfiguration {
     private final static DefaultValue<String> DEFAULT_PHANTOMJS_EXECUTABLE_PATH = new DefaultValue<String>() {
         public String getDefault() {
             try {
+                LOG.log(Level.WARNING, "{0} capability isn't set, so resolving phantomjs binary as temporary file.",
+                        new String[] { ResolverConfiguration.PHANTOMJS_EXECUTABLE_PATH });
+
                 File tempFile = File.createTempFile("phantomjs-binary-", "");
                 tempFile.deleteOnExit();
                 return tempFile.getAbsolutePath();
@@ -48,6 +53,8 @@ public final class ResolverConfiguration {
      */
     public static final String PHANTOMJS_BINARY_VERSION = "phantomjs.binary.version";
     static final String DEFAULT_PHANTOMJS_BINARY_VERSION = "1.9.1";
+
+    private static final Logger LOG = Logger.getLogger(ResolvingPhantomJSDriverService.class.getName());
 
     private Capabilities capabilities;
 

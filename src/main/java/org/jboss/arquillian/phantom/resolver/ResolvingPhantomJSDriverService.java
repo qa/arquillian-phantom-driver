@@ -2,7 +2,6 @@ package org.jboss.arquillian.phantom.resolver;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openqa.selenium.Capabilities;
@@ -74,11 +73,7 @@ public class ResolvingPhantomJSDriverService extends DriverService {
 
         File executablePath = configuration.executablePath();
 
-        LOG.log(Level.WARNING, "{0} capability isn't set, so resolving phantomjs binary as temporary file.",
-                new String[] { ResolverConfiguration.PHANTOMJS_EXECUTABLE_PATH });
-
         PhantomJSBinary binary = binaryResolver.resolve(executablePath);
-        binary.deleteOnExit();
 
         return binary;
     }
