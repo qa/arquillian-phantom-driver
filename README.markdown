@@ -10,7 +10,7 @@ Add following snippet to your project's POM:
         <dependency>
             <groupId>org.jboss.arquillian.extension</groupId>
             <artifactId>arquillian-phantom-driver</artifactId>
-            <version>1.0.3</version>
+            <version>1.0.3-1</version>
         </dependency>
     </dependencies>
 
@@ -24,7 +24,15 @@ or you can specify path to the phantomjs binary file. If the binary file doesn't
 the resolver will copy own file to the given path:
 
     DesiredCapabilities capabilities = DesiredCapabilities.phantomjs();
-    capabilities.setCapability("phantomjs.binary.path", "path/to/phantomjs/binary");
+
+    // where the binary binary is expected (will be resolved when file does not exist)
+    capabilities.setCapability("phantomjs.binary.path", "./target/phantomjs");
+
+    // enforce resolver to use given phantomjs version
+    capabilities.setCapability("phantomjs.binary.version", "1.9.1");
+
+    // if there is phantomjs available on PATH, use that one
+    capabilities.setCapability("phantomjs.prefer.resolved", Boolean.FALSE);
 
     WebDriver driver = new PhantomJSDriver(
             ResolvingPhantomJSDriverService.createDefaultService(),
