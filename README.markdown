@@ -10,7 +10,7 @@ Add following snippet to your project's POM:
         <dependency>
             <groupId>org.jboss.arquillian.extension</groupId>
             <artifactId>arquillian-phantom-driver</artifactId>
-            <version>1.0.3-1</version>
+            <version>1.1.0.Beta1</version>
         </dependency>
     </dependencies>
 
