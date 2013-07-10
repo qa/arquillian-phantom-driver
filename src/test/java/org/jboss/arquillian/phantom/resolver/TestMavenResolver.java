@@ -60,7 +60,7 @@ public class TestMavenResolver {
     @Test
     public void testChangingVersion() throws IOException {
         // given
-        System.setProperty(ResolverConfiguration.PHANTOMJS_BINARY_VERSION, "1.9.0");
+        System.setProperty(ResolverConfiguration.PHANTOMJS_BINARY_VERSION, "1.9.1");
 
         // when
         File location = resolver.resolve(new File("target/testVersion-phantomjs")).deleteOnExit().getLocation();
@@ -68,6 +68,6 @@ public class TestMavenResolver {
         cmd.execute();
 
         // then
-        assertThat(cmd.getStdOut(), containsString("1.9.0"));
+        assertThat(cmd.getStdOut(), containsString("1.9.1"));
     }
 }
