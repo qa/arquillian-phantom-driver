@@ -40,7 +40,7 @@ public class MavenPhantomJSBinaryResolver implements PhantomJSBinaryResolver {
     @Override
     public PhantomJSBinary resolve(File destination) throws IOException {
         File realDestination = destination.isDirectory() ? new File(destination, PHANTOMJS) : destination;
-        if (realDestination.exists() && realDestination.canExecute()) {
+        if (realDestination.exists() && realDestination.length() > 0 && realDestination.canExecute()) {
             return new PhantomJSBinary(realDestination);
         }
         return resolveFreshExtracted(realDestination);
