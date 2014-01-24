@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.service.DriverService;
 
@@ -15,7 +16,7 @@ public class TestDriver {
 
     @Test
     public void testSimple() throws IOException {
-        DriverService service = ResolvingPhantomJSDriverService.createDefaultService();
+        PhantomJSDriverService service = ResolvingPhantomJSDriverService.createDefaultService();
 
         WebDriver driver = new PhantomJSDriver(service, DesiredCapabilities.phantomjs());
         loadPage(driver);

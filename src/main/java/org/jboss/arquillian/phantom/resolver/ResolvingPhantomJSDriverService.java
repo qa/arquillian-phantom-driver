@@ -28,7 +28,7 @@ public class ResolvingPhantomJSDriverService extends DriverService {
      * Creates a new service with phantomjs binary from PATH; if there is no phantomjs on PATH, binary will be resolved to
      * temporary location
      */
-    public static DriverService createDefaultService() throws IOException {
+    public static PhantomJSDriverService createDefaultService() throws IOException {
         return createDefaultService(null);
     }
 
@@ -41,7 +41,7 @@ public class ResolvingPhantomJSDriverService extends DriverService {
      *
      * See {@link ResolverConfiguration} for list of capabilities which can be set in order to change behavior of resolver.
      */
-    public static DriverService createDefaultService(Capabilities capabilities) throws IOException {
+    public static PhantomJSDriverService createDefaultService(Capabilities capabilities) throws IOException {
 
         final ResolverConfiguration configuration = ResolverConfiguration.get(capabilities);
 
