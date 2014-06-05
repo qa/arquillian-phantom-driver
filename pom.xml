@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.jboss</groupId>
         <artifactId>jboss-parent</artifactId>
-        <version>12</version>
+        <version>14</version>
         <relativePath />
     </parent>
 
@@ -37,15 +37,15 @@
 
     <properties>
         <!-- versions -->
-        <selenium.version>2.39.0</selenium.version>
-        <phantomjs.driver.version>1.1.0</phantomjs.driver.version>
+        <selenium.version>2.42.0</selenium.version>
+        <phantomjs.driver.version>1.2.0</phantomjs.driver.version>
         <junit.version>4.11</junit.version>
-        <shrinkwrap.resolver.version>2.0.0</shrinkwrap.resolver.version>
+        <shrinkwrap.resolver.version>2.1.1</shrinkwrap.resolver.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>com.github.detro.ghostdriver</groupId>
+            <groupId>com.github.detro</groupId>
             <artifactId>phantomjsdriver</artifactId>
             <version>${phantomjs.driver.version}</version>
         </dependency>
