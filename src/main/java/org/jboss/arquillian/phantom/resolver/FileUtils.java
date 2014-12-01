@@ -56,7 +56,12 @@ public class FileUtils {
     public static void setExecutable(File file) throws IOException {
         if (isUnix()) {
             try {
-                Runtime.getRuntime().exec("chmod +x " + file.getAbsolutePath()).waitFor();
+                ProcessBuilder pb = new ProcessBuilder("chmod", "+x", file.getAbsolutePath());
+                int exitCode = pb.start().waitFor();
+                if (exitCode != 0) {
+                    throw new IOException("Unable to set executable flag on " + file.getAbsolutePath()
+                       + ". Exit code was " + exitCode);
+                }
             } catch (InterruptedException ex) {
                 Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, null, ex);
             }

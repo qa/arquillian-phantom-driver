@@ -1,9 +1,5 @@
 package org.jboss.arquillian.phantom.resolver;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -12,6 +8,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.os.CommandLine;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class TestMavenResolver {
 
@@ -33,6 +32,13 @@ public class TestMavenResolver {
         File location = binary.getLocation();
 
         assertTrue(location.exists());
+    }
+
+    @Test
+    public void testIsExecutable() throws IOException {
+        PhantomJSBinary binary = resolver.resolve(new File("target/folder with spaces/testExecutable-phantomjs"));
+        File location = binary.getLocation();
+        assertTrue(location.canExecute());
     }
 
     @Test
