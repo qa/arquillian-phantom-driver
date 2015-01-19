@@ -37,7 +37,7 @@
 
     <properties>
         <!-- versions -->
-        <selenium.version>2.42.0</selenium.version>
+        <selenium.version>2.43.1</selenium.version>
         <phantomjs.driver.version>1.2.0</phantomjs.driver.version>
         <junit.version>4.11</junit.version>
         <shrinkwrap.resolver.version>2.1.1</shrinkwrap.resolver.version>
