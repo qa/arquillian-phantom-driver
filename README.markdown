@@ -34,8 +34,11 @@ the resolver will copy own file to the given path:
     // if there is phantomjs available on PATH, use that one
     capabilities.setCapability("phantomjs.prefer.resolved", Boolean.FALSE);
 
+    // NOTE: capabilities must be passed into the ResolvingPhantomJSDriverService if you plan on passing custom
+    // command-line arguments such as disabling SSL Certificate checking or other features.  
+
     WebDriver driver = new PhantomJSDriver(
-            ResolvingPhantomJSDriverService.createDefaultService(),
+            ResolvingPhantomJSDriverService.createDefaultService(capabilities),
             capabilities);
 
 ## Installation
