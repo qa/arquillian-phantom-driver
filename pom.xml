@@ -5,13 +5,13 @@
     <parent>
         <groupId>org.jboss</groupId>
         <artifactId>jboss-parent</artifactId>
-        <version>14</version>
+        <version>19</version>
         <relativePath />
     </parent>
 
     <groupId>org.jboss.arquillian.extension</groupId>
     <artifactId>arquillian-phantom-driver</artifactId>
-    <version>1.2.0-SNAPSHOT</version>
+    <version>1.1.5-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Arquillian Phantom Driver</name>
@@ -37,9 +37,9 @@
 
     <properties>
         <!-- versions -->
-        <selenium.version>2.45.0</selenium.version>
+        <selenium.version>2.46.0</selenium.version>
         <phantomjs.driver.version>1.2.1</phantomjs.driver.version>
-        <junit.version>4.11</junit.version>
+        <junit.version>4.12</junit.version>
         <shrinkwrap.resolver.version>2.1.1</shrinkwrap.resolver.version>
     </properties>
 
