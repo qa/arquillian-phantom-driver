@@ -4,15 +4,22 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+import org.jboss.arquillian.phantom.resolver.maven.PlatformUtils;
 import org.junit.Assert;
+import org.junit.Assume;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.service.DriverService;
 
 public class TestDriver {
+
+    @Before
+    public void setUp(){
+        Assume.assumeFalse(PlatformUtils.platform().os() == PlatformUtils.OperatingSystem.UNIX);
+    }
 
     @Test
     public void testSimple() throws IOException {

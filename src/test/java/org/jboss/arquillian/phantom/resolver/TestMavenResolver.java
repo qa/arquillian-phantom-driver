@@ -4,10 +4,13 @@ import java.io.File;
 import java.io.IOException;
 
 import org.jboss.arquillian.phantom.resolver.maven.MavenPhantomJSBinaryResolver;
+import org.jboss.arquillian.phantom.resolver.maven.PlatformUtils;
 import org.junit.After;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.os.CommandLine;
+
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -18,6 +21,7 @@ public class TestMavenResolver {
 
     @Before
     public void setUp() {
+        Assume.assumeFalse(PlatformUtils.platform().os() == PlatformUtils.OperatingSystem.UNIX);
         System.setProperty(ResolverConfiguration.PHANTOMJS_BINARY_VERSION, ResolverConfiguration.DEFAULT_PHANTOMJS_BINARY_VERSION);
     }
 
@@ -66,7 +70,7 @@ public class TestMavenResolver {
     @Test
     public void testChangingVersion() throws IOException {
         // given
-        System.setProperty(ResolverConfiguration.PHANTOMJS_BINARY_VERSION, "1.9.2");
+        System.setProperty(ResolverConfiguration.PHANTOMJS_BINARY_VERSION, "2.0.0");
 
         // when
         File location = resolver.resolve(new File("target/testVersion-phantomjs")).deleteOnExit().getLocation();
@@ -74,6 +78,6 @@ public class TestMavenResolver {
         cmd.execute();
 
         // then
-        assertThat(cmd.getStdOut(), containsString("1.9.2"));
+        assertThat(cmd.getStdOut(), containsString("2.0.0"));
     }
 }

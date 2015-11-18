@@ -2,6 +2,8 @@
 
 Arquillian Phantom Driver provides dependency on the [GhostDriver](https://github.com/detro/ghostdriver), dependency on [PhantomJS](http://phantomjs.org/) binary and provides runtime resolution of [the binary artifact](https://github.com/qa/arquillian-phantom-binary) (distributed in Maven repository) to enable true headless unattended testing without need of local PhantomJS installation.
 
+##### NOTE: Please keep in mind that there is no binary packages of PhantomJS 2.0.0 available for Linux, so the version 1.2.0 of Arquillian Phantom Driver doesn't support the Linux platform! For more information see: http://phantomjs.org/download.html and https://github.com/ariya/phantomjs/issues/12948
+
 ## Usage
 
 Add following snippet to your project's POM:
@@ -29,7 +31,7 @@ the resolver will copy own file to the given path:
     capabilities.setCapability("phantomjs.binary.path", "./target/phantomjs");
 
     // enforce resolver to use given phantomjs version
-    capabilities.setCapability("phantomjs.binary.version", "1.9.1");
+    capabilities.setCapability("phantomjs.binary.version", "2.0.0");
 
     // if there is phantomjs available on PATH, use that one
     capabilities.setCapability("phantomjs.prefer.resolved", Boolean.FALSE);
