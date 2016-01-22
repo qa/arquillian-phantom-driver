@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.jboss</groupId>
         <artifactId>jboss-parent</artifactId>
-        <version>14</version>
+        <version>19</version>
         <relativePath />
     </parent>
 
@@ -37,11 +37,23 @@
 
     <properties>
         <!-- versions -->
-        <selenium.version>2.45.0</selenium.version>
         <phantomjs.driver.version>1.2.1</phantomjs.driver.version>
-        <junit.version>4.11</junit.version>
-        <shrinkwrap.resolver.version>2.1.1</shrinkwrap.resolver.version>
+        <junit.version>4.12</junit.version>
+        <shrinkwrap.resolver.version>2.2.0</shrinkwrap.resolver.version>
+        <selenium.version>2.49.1</selenium.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.jboss.arquillian.selenium</groupId>
+                <artifactId>selenium-bom</artifactId>
+                <version>${selenium.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>

@@ -28,7 +28,7 @@ import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 public class MavenPhantomJSBinaryResolver implements PhantomJSBinaryResolver {
 
     public static final String PHANTOMJS = "phantomjs" + (PlatformUtils.isWindows() ? ".exe" : "");
-    public static final String PHANTOMJS_RESOURCE = (PlatformUtils.isWindows() ? "" : "bin/") + PHANTOMJS;
+    public static final String PHANTOMJS_RESOURCE = "bin/" + PHANTOMJS;
 
     protected static final String ARTIFACT_BINARY = "org.jboss.arquillian.extension:arquillian-phantom-binary:jar";
 
@@ -78,19 +78,27 @@ public class MavenPhantomJSBinaryResolver implements PhantomJSBinaryResolver {
         switch (PlatformUtils.platform().os()) {
             case WINDOWS:
                 return ARTIFACT_BINARY + ":windows:" + version;
+
             case UNIX:
-                if (PlatformUtils.is64()) {
-                    return ARTIFACT_BINARY + ":linux-64:" + version;
-                } else {
-                    return ARTIFACT_BINARY + ":linux-32:" + version;
-                }
+                StringBuffer messageLinux = new StringBuffer("This version does not support Linux - ");
+                messageLinux.append("use an older one please. ");
+                messageLinux.append(
+                    "The reason is that there is no binary packages of PhantomJS 2.0.0 available for Linux. ");
+                messageLinux.append("This version supports only windows and macosx. ");
+                messageLinux.append("For more information see http://phantomjs.org/download.html ");
+                messageLinux.append("or https://github.com/ariya/phantomjs/issues/12948");
+                throw new IllegalStateException(messageLinux.toString());
+
             case MACOSX:
                 return ARTIFACT_BINARY + ":macosx:" + version;
+
             default:
-                throw new IllegalStateException("The current platform is not supported."
-                        + "Supported platforms are windows, linux and macosx." + "Your platform has been detected as "
-                        + PlatformUtils.platform().os().toString().toLowerCase() + ""
-                        + "from the the system property 'os.name' => '" + PlatformUtils.OS + "'.");
+                StringBuffer messageOthers = new StringBuffer("The current platform is not supported. ");
+                messageOthers.append("Platforms supported by this version are only windows and macosx. ");
+                messageOthers.append("Your platform has been detected as ");
+                messageOthers.append(PlatformUtils.platform().os().toString().toLowerCase() + " ");
+                messageOthers.append("from the the system property 'os.name' => '" + PlatformUtils.OS + "'.");
+                throw new IllegalStateException(messageOthers.toString());
         }
     }
 
