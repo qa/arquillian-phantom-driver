@@ -28,7 +28,7 @@ import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 public class MavenPhantomJSBinaryResolver implements PhantomJSBinaryResolver {
 
     public static final String PHANTOMJS = "phantomjs" + (PlatformUtils.isWindows() ? ".exe" : "");
-    public static final String PHANTOMJS_RESOURCE = (PlatformUtils.isWindows() ? "" : "bin/") + PHANTOMJS;
+    public static final String PHANTOMJS_RESOURCE = "bin/" + PHANTOMJS;
 
     protected static final String ARTIFACT_BINARY = "org.jboss.arquillian.extension:arquillian-phantom-binary:jar";
 
