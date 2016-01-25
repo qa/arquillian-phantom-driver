@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.os.CommandLine;
+
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -15,7 +16,6 @@ import static org.junit.Assert.assertTrue;
 public class TestMavenResolver {
 
     private PhantomJSBinaryResolver resolver = new MavenPhantomJSBinaryResolver();
-
     @Before
     public void setUp() {
         System.setProperty(ResolverConfiguration.PHANTOMJS_BINARY_VERSION, ResolverConfiguration.DEFAULT_PHANTOMJS_BINARY_VERSION);
@@ -66,7 +66,8 @@ public class TestMavenResolver {
     @Test
     public void testChangingVersion() throws IOException {
         // given
-        System.setProperty(ResolverConfiguration.PHANTOMJS_BINARY_VERSION, "1.9.2");
+        System.setProperty(ResolverConfiguration.PHANTOMJS_BINARY_VERSION,
+                           ResolverConfiguration.DEFAULT_PHANTOMJS_BINARY_VERSION);
 
         // when
         File location = resolver.resolve(new File("target/testVersion-phantomjs")).deleteOnExit().getLocation();
@@ -74,6 +75,6 @@ public class TestMavenResolver {
         cmd.execute();
 
         // then
-        assertThat(cmd.getStdOut(), containsString("1.9.2"));
+        assertThat(cmd.getStdOut(), containsString(ResolverConfiguration.DEFAULT_PHANTOMJS_BINARY_VERSION));
     }
 }

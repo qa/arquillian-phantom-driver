@@ -29,7 +29,7 @@ the resolver will copy own file to the given path:
     capabilities.setCapability("phantomjs.binary.path", "./target/phantomjs");
 
     // enforce resolver to use given phantomjs version
-    capabilities.setCapability("phantomjs.binary.version", "1.9.1");
+    capabilities.setCapability("phantomjs.binary.version", "2.1.1");
 
     // if there is phantomjs available on PATH, use that one
     capabilities.setCapability("phantomjs.prefer.resolved", Boolean.FALSE);

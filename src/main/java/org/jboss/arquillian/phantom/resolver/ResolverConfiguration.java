@@ -52,7 +52,7 @@ public final class ResolverConfiguration {
      * Defines the version of PhantomJS executable binary to resolve
      */
     public static final String PHANTOMJS_BINARY_VERSION = "phantomjs.binary.version";
-    static final String DEFAULT_PHANTOMJS_BINARY_VERSION = "1.9.8";
+    static final String DEFAULT_PHANTOMJS_BINARY_VERSION = "2.1.1";
 
     private static final Logger LOG = Logger.getLogger(ResolvingPhantomJSDriverService.class.getName());
 
