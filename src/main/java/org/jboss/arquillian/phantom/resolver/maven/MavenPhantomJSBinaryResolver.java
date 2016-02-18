@@ -39,24 +39,34 @@ public class MavenPhantomJSBinaryResolver implements PhantomJSBinaryResolver {
      */
     @Override
     public PhantomJSBinary resolve(File destination) throws IOException {
+        return resolve(destination, null);
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.jboss.arquillian.phantom.resolver.PhantomJSBinaryResolver#resolve(java.io.File,java.util.String)
+     */
+    @Override
+    public PhantomJSBinary resolve(File destination, String version) throws IOException {
         File realDestination = destination.isDirectory() ? new File(destination, PHANTOMJS) : destination;
         if (realDestination.exists() && realDestination.length() > 0 && realDestination.canExecute()) {
             return new PhantomJSBinary(realDestination);
         }
-        return resolveFreshExtracted(realDestination);
+        return resolveFreshExtracted(realDestination, version);
     }
 
     /**
      * Resolves fresh phantomjs binary from Maven
      */
-    protected PhantomJSBinary resolveFreshExtracted(File destination) throws IOException {
+    protected PhantomJSBinary resolveFreshExtracted(File destination, String version) throws IOException {
         if (destination.exists()) {
             destination.delete();
         }
         if (!destination.getParentFile().exists()) {
             destination.getParentFile().mkdirs();
         }
-        ZipFile jar = new ZipFile(getJavaArchive());
+        ZipFile jar = new ZipFile(getJavaArchive(version));
         FileUtils.extract(jar, PHANTOMJS_RESOURCE, destination);
         return new PhantomJSBinary(destination);
     }
@@ -64,9 +74,12 @@ public class MavenPhantomJSBinaryResolver implements PhantomJSBinaryResolver {
     /**
      * Obtains JavaArchive with phantomjs binary
      */
-    protected File getJavaArchive() {
-        final String version = ResolverConfiguration.get().version();
-        final String gav = getArtifactCanonicalForm(version);
+    protected File getJavaArchive(String version) {
+        String v = version;
+        if (v == null) {
+            v = ResolverConfiguration.get().version();
+        }
+        final String gav = getArtifactCanonicalForm(v);
 
         return Maven.resolver().resolve(gav).withoutTransitivity().asSingleFile();
     }

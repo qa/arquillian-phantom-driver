@@ -67,7 +67,7 @@ public class TestMavenResolver {
     public void testChangingVersion() throws IOException {
         // given
         System.setProperty(ResolverConfiguration.PHANTOMJS_BINARY_VERSION,
-                           ResolverConfiguration.DEFAULT_PHANTOMJS_BINARY_VERSION);
+                           "1.9.8");
 
         // when
         File location = resolver.resolve(new File("target/testVersion-phantomjs")).deleteOnExit().getLocation();
@@ -75,6 +75,18 @@ public class TestMavenResolver {
         cmd.execute();
 
         // then
-        assertThat(cmd.getStdOut(), containsString(ResolverConfiguration.DEFAULT_PHANTOMJS_BINARY_VERSION));
+        assertThat(cmd.getStdOut(), containsString("1.9.8"));
+    }
+
+    @Test
+    public void testChangingVersionViaParameter() throws IOException {
+        // when
+        File location =
+            resolver.resolve(new File("target/testVersion-phantomjs"), "1.9.7").deleteOnExit().getLocation();
+        CommandLine cmd = new CommandLine(location.getAbsolutePath(), new String[] { "--version" });
+        cmd.execute();
+
+        // then
+        assertThat(cmd.getStdOut(), containsString("1.9.7"));
     }
 }

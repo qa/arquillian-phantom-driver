@@ -4,14 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.os.CommandLine;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.service.DriverService;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 
 public class ResolvingPhantomJSDriverService extends DriverService {
 
@@ -72,8 +71,9 @@ public class ResolvingPhantomJSDriverService extends DriverService {
         final PhantomJSBinaryResolver binaryResolver = configuration.resolver();
 
         File executablePath = configuration.executablePath();
+        String version = configuration.version();
 
-        PhantomJSBinary binary = binaryResolver.resolve(executablePath);
+        PhantomJSBinary binary = binaryResolver.resolve(executablePath, version);
 
         return binary;
     }
