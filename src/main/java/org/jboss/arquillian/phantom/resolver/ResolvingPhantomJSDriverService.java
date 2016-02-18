@@ -53,7 +53,30 @@ public class ResolvingPhantomJSDriverService extends DriverService {
         DesiredCapabilities newCapabilities = new DesiredCapabilities(capabilities);
         newCapabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, binary.getLocation()
                 .getAbsolutePath());
+        reformatCLIArgumentsInCapToArray(newCapabilities);
+
         return PhantomJSDriverService.createDefaultService(newCapabilities);
+    }
+
+    /**
+     * Reformats {@link PhantomJSDriverService.PHANTOMJS_CLI_ARGS} and
+     * {@link PhantomJSDriverService.PHANTOMJS_GHOSTDRIVER_CLI_ARGS} from String to String[]
+     *
+     * @param capabilities Capabilities
+     */
+    protected static void reformatCLIArgumentsInCapToArray(DesiredCapabilities capabilities){
+        reformatCapabilityToArray(capabilities, PhantomJSDriverService.PHANTOMJS_CLI_ARGS);
+        reformatCapabilityToArray(capabilities, PhantomJSDriverService.PHANTOMJS_GHOSTDRIVER_CLI_ARGS);
+    }
+
+    private static void reformatCapabilityToArray(DesiredCapabilities capabilities, String capabilityName){
+        Object capability = capabilities.getCapability(capabilityName);
+        if (capability != null) {
+            if (capability instanceof String){
+                String[] splitArgs = ((String) capability).split(" ");
+                capabilities.setCapability(capabilityName, splitArgs);
+            }
+        }
     }
 
     @SuppressWarnings("deprecation")
