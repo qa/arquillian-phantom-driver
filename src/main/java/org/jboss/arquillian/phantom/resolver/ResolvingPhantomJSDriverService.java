@@ -4,14 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.os.CommandLine;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.service.DriverService;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 
 public class ResolvingPhantomJSDriverService extends DriverService {
 
@@ -54,7 +53,30 @@ public class ResolvingPhantomJSDriverService extends DriverService {
         DesiredCapabilities newCapabilities = new DesiredCapabilities(capabilities);
         newCapabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, binary.getLocation()
                 .getAbsolutePath());
+        reformatCLIArgumentsInCapToArray(newCapabilities);
+
         return PhantomJSDriverService.createDefaultService(newCapabilities);
+    }
+
+    /**
+     * Reformats {@link PhantomJSDriverService.PHANTOMJS_CLI_ARGS} and
+     * {@link PhantomJSDriverService.PHANTOMJS_GHOSTDRIVER_CLI_ARGS} from String to String[]
+     *
+     * @param capabilities Capabilities
+     */
+    protected static void reformatCLIArgumentsInCapToArray(DesiredCapabilities capabilities){
+        reformatCapabilityToArray(capabilities, PhantomJSDriverService.PHANTOMJS_CLI_ARGS);
+        reformatCapabilityToArray(capabilities, PhantomJSDriverService.PHANTOMJS_GHOSTDRIVER_CLI_ARGS);
+    }
+
+    private static void reformatCapabilityToArray(DesiredCapabilities capabilities, String capabilityName){
+        Object capability = capabilities.getCapability(capabilityName);
+        if (capability != null) {
+            if (capability instanceof String){
+                String[] splitArgs = ((String) capability).split(" ");
+                capabilities.setCapability(capabilityName, splitArgs);
+            }
+        }
     }
 
     @SuppressWarnings("deprecation")
