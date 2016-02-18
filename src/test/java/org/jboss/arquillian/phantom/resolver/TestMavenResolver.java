@@ -34,6 +34,7 @@ public class TestMavenResolver {
         File location = binary.getLocation();
 
         assertTrue(location.exists());
+        location.delete();
     }
 
     @Test
@@ -41,6 +42,7 @@ public class TestMavenResolver {
         PhantomJSBinary binary = resolver.resolve(new File("target/folder with spaces/testExecutable-phantomjs"));
         File location = binary.getLocation();
         assertTrue(location.canExecute());
+        location.delete();
     }
 
     @Test
@@ -52,6 +54,7 @@ public class TestMavenResolver {
 
         resolver.resolve(new File("target/testDelete-phantomjs"));
         assertTrue(location.exists());
+        location.delete();
     }
 
     @Test
@@ -63,6 +66,7 @@ public class TestMavenResolver {
 
         // then
         assertThat(cmd.getStdOut(), containsString(ResolverConfiguration.DEFAULT_PHANTOMJS_BINARY_VERSION));
+        location.delete();
     }
 
     @Test
@@ -78,6 +82,7 @@ public class TestMavenResolver {
 
         // then
         assertThat(cmd.getStdOut(), containsString("1.9.8"));
+        location.delete();
     }
 
     @Test
@@ -90,6 +95,7 @@ public class TestMavenResolver {
 
         // then
         assertThat(cmd.getStdOut(), containsString("1.9.7"));
+        location.delete();
     }
 
     @Test
@@ -107,5 +113,6 @@ public class TestMavenResolver {
 
         // then
         assertThat(cmd.getStdOut(), containsString(ResolverConfiguration.DEFAULT_PHANTOMJS_BINARY_VERSION));
+        location.delete();
     }
 }
