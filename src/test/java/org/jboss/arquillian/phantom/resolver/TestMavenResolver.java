@@ -115,4 +115,21 @@ public class TestMavenResolver {
         assertThat(cmd.getStdOut(), containsString(ResolverConfiguration.DEFAULT_PHANTOMJS_BINARY_VERSION));
         location.delete();
     }
+
+    @Test
+    public void testReformatCLIArgumentsInCapToArray() throws IOException {
+        // given
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, "--version");
+        ResolvingPhantomJSDriverService.reformatCLIArgumentsInCapToArray(capabilities);
+
+        // when
+        File location = resolver.resolve(new File("target/testVersion-phantomjs")).deleteOnExit().getLocation();
+        CommandLine cmd = new CommandLine(location.getAbsolutePath(), (String[]) capabilities.getCapability(
+            PhantomJSDriverService.PHANTOMJS_CLI_ARGS));
+        cmd.execute();
+
+        // then
+        assertThat(cmd.getStdOut(), containsString(ResolverConfiguration.DEFAULT_PHANTOMJS_BINARY_VERSION));
+    }
 }
