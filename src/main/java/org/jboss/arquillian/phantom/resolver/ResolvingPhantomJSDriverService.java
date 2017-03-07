@@ -11,6 +11,8 @@ import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.service.DriverService;
 
+import static org.openqa.selenium.phantomjs.PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY;
+
 public class ResolvingPhantomJSDriverService extends DriverService {
 
     private static final String PHANTOMJS_DEFAULT_EXECUTABLE = "phantomjs";
@@ -50,8 +52,8 @@ public class ResolvingPhantomJSDriverService extends DriverService {
         PhantomJSBinary binary = resolveBinary(configuration);
 
         DesiredCapabilities newCapabilities = new DesiredCapabilities(capabilities);
-        newCapabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, binary.getLocation()
-                .getAbsolutePath());
+        newCapabilities.setCapability(PHANTOMJS_EXECUTABLE_PATH_PROPERTY, binary.getLocation().getAbsolutePath());
+        System.setProperty(PHANTOMJS_EXECUTABLE_PATH_PROPERTY, binary.getLocation().getAbsolutePath());
         reformatCLIArgumentsInCapToArray(newCapabilities);
 
         return PhantomJSDriverService.createDefaultService(newCapabilities);
