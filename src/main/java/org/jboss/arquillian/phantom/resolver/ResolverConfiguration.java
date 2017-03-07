@@ -16,7 +16,7 @@ public final class ResolverConfiguration {
      * be prefered
      */
     public final static String PREFER_RESOLVED = "phantomjs.prefer.resolved";
-    private final static boolean DEFAULT_PREFER_RESOLVED = true;
+    private final static String DEFAULT_PREFER_RESOLVED = "true";
 
     /**
      * A capability name which denotes which Binary resolver will be used to obtain a {@link PhantomJSBinary}
@@ -77,7 +77,7 @@ public final class ResolverConfiguration {
     }
 
     public boolean preferResolved() {
-        return capabilityOrDefault(PREFER_RESOLVED, DEFAULT_PREFER_RESOLVED);
+        return Boolean.valueOf(capabilityOrDefault(PREFER_RESOLVED, DEFAULT_PREFER_RESOLVED));
     }
 
     public PhantomJSBinaryResolver resolver() {
