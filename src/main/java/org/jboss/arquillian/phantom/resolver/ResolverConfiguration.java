@@ -107,7 +107,7 @@ public final class ResolverConfiguration {
         Object object = System.getProperty(capabilityOrPropertyName);
 
         // try obtain from capabilities
-        if (capabilities != null) {
+        if (object == null && capabilities != null) {
             object = capabilities.getCapability(capabilityOrPropertyName);
         }
 
