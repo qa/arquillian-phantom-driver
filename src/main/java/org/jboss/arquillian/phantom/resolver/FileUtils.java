@@ -9,15 +9,25 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import com.google.common.base.Charsets;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.io.Files;
+import org.openqa.selenium.Platform;
+
+import static org.openqa.selenium.Platform.WINDOWS;
+
 public class FileUtils {
 
     private static final FileExecutableChecker fileExecutableChecker = new FileExecutableChecker();
     private static final String OS = System.getProperty("os.name").toLowerCase();
+    private static final ImmutableSet<String> ENDINGS = Platform.getCurrent().is(WINDOWS) ?
+        ImmutableSet.of("", ".cmd", ".exe", ".com", ".bat") : ImmutableSet.of("");
 
     private FileUtils() {
     }
@@ -81,6 +91,71 @@ public class FileUtils {
         }
 
         return fileExecutableChecker.canExecute(file);
+    }
+
+    /**
+     * Find the executable by scanning the file system and the PATH. In the case of Windows this
+     * method allows common executable endings (".com", ".bat" and ".exe") to be omitted.
+     *
+     * @param command The name of the executable to find
+     * @return Whether the command is executable or not.
+     */
+    public static boolean isExecutable(String command) throws IllegalArgumentException {
+        File file = new File(command);
+        if (fileExecutableChecker.canExecute(file)) {
+            return true;
+        }
+
+        if (Platform.getCurrent().is(Platform.WINDOWS)) {
+            file = new File(command + ".exe");
+            if (fileExecutableChecker.canExecute(file)) {
+                return true;
+            }
+        }
+
+        final ImmutableSet.Builder<String> pathSegmentBuilder = new ImmutableSet.Builder<>();
+        addPathFromEnvironment(pathSegmentBuilder);
+        if (Platform.getCurrent().is(Platform.MAC)) {
+            addMacSpecificPath(pathSegmentBuilder);
+        }
+
+        for (String pathSegment : pathSegmentBuilder.build()) {
+            for (String ending : ENDINGS) {
+                file = new File(pathSegment, command + ending);
+                if (fileExecutableChecker.canExecute(file)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static void addPathFromEnvironment(final ImmutableSet.Builder<String> pathSegmentBuilder) {
+        String pathName = "PATH";
+        Map<String, String> env = System.getenv();
+        if (!env.containsKey(pathName)) {
+            for (String key : env.keySet()) {
+                if (pathName.equalsIgnoreCase(key)) {
+                    pathName = key;
+                    break;
+                }
+            }
+        }
+        String path = env.get(pathName);
+        if (path != null) {
+            pathSegmentBuilder.add(path.split(File.pathSeparator));
+        }
+    }
+
+    private static void addMacSpecificPath(final ImmutableSet.Builder<String> pathSegmentBuilder) {
+        File pathFile = new File("/etc/paths");
+        if (pathFile.exists()) {
+            try {
+                pathSegmentBuilder.addAll(Files.readLines(pathFile, Charsets.UTF_8));
+            } catch (IOException e) {
+                // Guess we won't include those, then
+            }
+        }
     }
 
     /**

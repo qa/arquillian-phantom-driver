@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.os.CommandLine;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.service.DriverService;
@@ -79,9 +78,8 @@ public class ResolvingPhantomJSDriverService extends DriverService {
         }
     }
 
-    @SuppressWarnings("deprecation")
     private static boolean isDefaultExecutablePresent() {
-        return CommandLine.find(PHANTOMJS_DEFAULT_EXECUTABLE) != null;
+        return FileUtils.isExecutable(PHANTOMJS_DEFAULT_EXECUTABLE);
     }
 
     /**
