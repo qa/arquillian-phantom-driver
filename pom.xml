@@ -11,7 +11,7 @@
 
     <groupId>org.jboss.arquillian.extension</groupId>
     <artifactId>arquillian-phantom-driver</artifactId>
-    <version>1.2.2-SNAPSHOT</version>
+    <version>1.2.1.1</version>
     <packaging>jar</packaging>
 
     <name>Arquillian Phantom Driver</name>
@@ -96,6 +96,6 @@
         <connection>scm:git:git://github.com/qa/arquillian-phantom-driver.git</connection>
         <developerConnection>scm:git:git@github.com:qa/arquillian-phantom-driver.git</developerConnection>
         <url>https://github.com/qa/arquillian-phantom-driver</url>
-        <tag>HEAD</tag>
+        <tag>1.2.1.1</tag>
     </scm>
 </project>
